@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Sending</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("emailForm").addEventListener("submit", async function (event) {
+          event.preventDefault(); // Prevent page refresh
+
+          const formData = {
+            sender: document.getElementById("sender").value,
+            recipient: document.querySelector("input[name='recipient']").value,
+            subject: document.querySelector("input[name='subject']").value,
+            message: document.querySelector("textarea[name='message']").value
+          };
+
+          const response = await fetch("http://127.0.0.1:5001/send_email", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData)
+          });
+
+          const result = await response.json();
+          alert(result.message || result.error);
+        });
+      });
+  </script>
+
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center h-screen" onload="loadGoogleSignIn()">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
+    <h2 class="text-2xl font-bold mb-4">Send an Email</h2>
+    <div id="g_id_signin" class="mb-4"></div>
+    <form id="emailForm" class="space-y-4">
+      <div>
+        <label class="block text-gray-700">Sender Email</label>
+        <input type="email" id="sender" name="sender" required class="w-full px-3 py-2 border rounded">
+      </div>
+      <div>
+        <label class="block text-gray-700">Recipient Email</label>
+        <input type="email" name="recipient" required class="w-full px-3 py-2 border rounded">
+      </div>
+      <div>
+        <label class="block text-gray-700">Subject</label>
+        <input type="text" name="subject" required class="w-full px-3 py-2 border rounded">
+      </div>
+      <div>
+        <label class="block text-gray-700">Message</label>
+        <textarea name="message" required class="w-full px-3 py-2 border rounded"></textarea>
+      </div>
+      <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Send Email</button>
+    </form>
+  </div>
+</body>
+
+</html>
