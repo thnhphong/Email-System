@@ -1,0 +1,6 @@
+Flask
+Flask-CORS
+Flask-Mail
+gunicorn
+python-dotenv
+
